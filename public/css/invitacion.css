@@ -113,9 +113,9 @@ html, body {
   box-shadow: 0 25px 50px rgba(0,0,0,0.7), 0 0 30px rgba(63, 208, 255, 0.3);
   transform: rotate(-1deg);
   border-radius: 12px;
-  width: 92%;               /* Se expande de forma responsiva al ancho disponible */
-  max-width: 380px;         /* Límite más alto para que luzca imponente y grande */
-  aspect-ratio: 3 / 4;      /* Proporción ideal para fotos verticales */
+  width: 92%;               
+  max-width: 380px;         
+  aspect-ratio: 3 / 4;      
   background-size: cover;
   background-position: center;
   margin-bottom: 35px;
@@ -140,7 +140,7 @@ html, body {
 .globo-inflado {
   font-family: 'Orbitron', sans-serif;
   font-weight: 900;
-  font-size: 110px;         /* Un poquito más grande para acompañar la foto */
+  font-size: 110px;         
   line-height: 0.9;
   letter-spacing: -4px;
   background: linear-gradient(135deg, #ff007f 0%, #ffaa00 50%, #00f0ff 100%);
