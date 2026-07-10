@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel Admin · 60 años de Rodo</title>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body>
+  <div class="topbar">
+    <h1>🪩 60 años de Rodo · Panel de invitaciones</h1>
+    <a href="/admin/logout">Cerrar sesión</a>
+  </div>
+
+  <div class="container">
+
+    <!-- RESUMEN -->
+    <div class="panel">
+      <h2>Resumen general</h2>
+      <div class="resumen-grid">
+        <div class="resumen-item pendiente">
+          <div class="num"><%= resumen.pendiente %></div>
+          <div class="label">Pendientes</div>
+        </div>
+        <div class="resumen-item confirmado">
+          <div class="num"><%= resumen.confirmado %></div>
+          <div class="label">Confirmados</div>
+        </div>
+        <div class="resumen-item cancelado">
+          <div class="num"><%= resumen.cancelado %></div>
+          <div class="label">Cancelados</div>
+        </div>
+        <div class="resumen-item">
+          <div class="num"><%= resumen.totalInvitaciones %></div>
+          <div class="label">Invitaciones</div>
+        </div>
+        <div class="resumen-item">
+          <div class="num"><%= resumen.pasesConfirmados %> / <%= resumen.totalPases %></div>
+          <div class="label">Pases confirmados</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CREAR NUEVA INVITACIÓN -->
+    <div class="panel">
+      <h2>Crear nueva invitación</h2>
+      <form class="form-grid" method="POST" action="/admin/invitados">
+        <div>
+          <label for="nombre">Nombre del invitado / familia</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Ej. Familia Hernández" required />
+        </div>
+        <div>
+          <label for="telefono_whatsapp">Teléfono WhatsApp (opcional)</label>
+          <input type="text" id="telefono_whatsapp" name="telefono_whatsapp" placeholder="Ej. +52 81 81 81 81 81" />
+        </div>
+        <div>
+          <label for="cantidad_invitados">Cantidad de pases</label>
+          <input type="number" id="cantidad_invitados" name="cantidad_invitados" value="1" min="1" required />
+        </div>
+        <div style="display:flex; align-items:flex-end;">
+          <div class="checkbox-row">
+            <input type="checkbox" id="es_familiar" name="es_familiar" />
+            <label for="es_familiar" style="margin:0;">Es invitación familiar</label>
+          </div>
+        </div>
+        <div class="full">
+          <label for="mensaje_personalizado">Mensaje personalizado (se usará al enviar por WhatsApp)</label>
+          <textarea id="mensaje_personalizado" name="mensaje_personalizado" rows="2"
+            placeholder="Nos encantaría que nos acompañes en un día muy especial. Abre el enlace para ver tu invitación."></textarea>
+        </div>
+        <div class="full">
+          <button class="btn-primary" type="submit">Crear invitación</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- LISTADO DE INVITADOS -->
+    <div class="panel">
+      <h2>Invitados registrados: <%= invitados.length %></h2>
+
+      <% invitados.forEach(function(inv) { %>
+        <div class="invitado-card">
+          <div class="invitado-info">
+            <h3><%= inv.nombre %></h3>
+            <p><%= inv.es_familiar ? 'Invitación familiar' : 'Invitación individual' %> para <%= inv.cantidad_invitados %> persona<%= inv.cantidad_invitados > 1 ? 's' : '' %></p>
+            <p style="margin-top:6px;">
+              <a href="<%= baseUrl %>/i/<%= inv.slug %>" target="_blank" style="color:#1a237e;"><%= baseUrl %>/i/<%= inv.slug %></a>
+            </p>
+          </div>
+
+          <div class="estado-counts">
+            <div class="pendiente">
+              <span class="label">Pendiente</span>
+              <span class="num"><%= inv.estado === 'pendiente' ? 1 : 0 %></span>
+            </div>
+            <div class="cancelado">
+              <span class="label">Cancelado</span>
+              <span class="num"><%= inv.estado === 'cancelado' ? 1 : 0 %></span>
+            </div>
+            <div class="confirmado">
+              <span class="label">Confirmado</span>
+              <span class="num"><%= inv.pases_confirmados %></span>
+            </div>
+          </div>
+
+          <div class="invitado-acciones">
+            <%
+              const mensaje = encodeURIComponent((inv.mensaje_personalizado || '') + ' ' + baseUrl + '/i/' + inv.slug);
+              const telLimpio = (inv.telefono_whatsapp || '').replace(/[^0-9]/g, '');
+            %>
+            <% if (telLimpio) { %>
+              <a class="whatsapp" href="https://wa.me/<%= telLimpio %>?text=<%= mensaje %>" target="_blank" title="Enviar por WhatsApp">💬</a>
+            <% } %>
+            <button onclick="copiarLink('<%= baseUrl %>/i/<%= inv.slug %>')" title="Copiar link">📋</button>
+            <button onclick="abrirEditar('<%= inv.id %>')" title="Editar">✏️</button>
+            <button class="eliminar" onclick="eliminarInvitado('<%= inv.id %>')" title="Eliminar">🗑️</button>
+          </div>
+        </div>
+      <% }); %>
+
+    </div>
+  </div>
+
+  <!-- MODAL EDITAR -->
+  <div class="modal-overlay" id="modalEditar">
+    <div class="modal-box">
+      <h3>Editar invitación</h3>
+      <form id="formEditar" class="form-grid">
+        <input type="hidden" id="edit_id" />
+        <div class="full">
+          <label>Nombre</label>
+          <input type="text" id="edit_nombre" required />
+        </div>
+        <div>
+          <label>Teléfono WhatsApp</label>
+          <input type="text" id="edit_telefono" />
+        </div>
+        <div>
+          <label>Cantidad de pases</label>
+          <input type="number" id="edit_cantidad" min="1" required />
+        </div>
+        <div class="full checkbox-row">
+          <input type="checkbox" id="edit_familiar" />
+          <label style="margin:0;">Es invitación familiar</label>
+        </div>
+        <div class="full">
+          <label>Mensaje personalizado</label>
+          <textarea id="edit_mensaje" rows="2"></textarea>
+        </div>
+      </form>
+      <div class="modal-acciones">
+        <button class="btn-secundario" onclick="cerrarEditar()">Cancelar</button>
+        <button class="btn-primary" onclick="guardarEdicion()">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= evento.tituloEvento %> · <%= evento.nombreFestejado %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/invitacion.css" />
+</head>
+<body>
+
+  <div class="starfield"></div>
+
+  <!-- ===== ALIEN QUE SE ASOMA (fijo, aparece cada rato) ===== -->
+  <div class="alien-peek" aria-hidden="true">
+    <svg class="alien-cabeza" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 8 C22 8 14 42 24 63 C29 77 71 77 76 63 C86 42 78 8 50 8 Z" fill="#e8e8ec" stroke="#3fd0ff" stroke-width="2"/>
+      <ellipse cx="35" cy="46" rx="10" ry="15" fill="#0a0e2b"/>
+      <ellipse cx="65" cy="46" rx="10" ry="15" fill="#0a0e2b"/>
+      <path d="M18 72 C10 78 6 90 10 98" stroke="#e8e8ec" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <path d="M82 72 C90 78 94 90 90 98" stroke="#e8e8ec" stroke-width="7" stroke-linecap="round" fill="none"/>
+    </svg>
+    <div class="alien-agujero"></div>
+  </div>
+
+  <!-- ===== PORTADA ===== -->
+  <section class="seccion portada <%= evento.fotoPortada ? 'con-foto' : '' %>"
+    <% if (evento.fotoPortada) { %> style="background-image: url('<%= evento.fotoPortada %>');" <% } %>>
+    <% if (evento.fotoPortada) { %><div class="portada-overlay"></div><% } %>
+
+    <div class="globos" aria-hidden="true">
+      <span class="globo globo-1"></span>
+      <span class="globo globo-2"></span>
+      <span class="globo globo-3"></span>
+      <span class="globo globo-4"></span>
+      <span class="globo globo-5"></span>
+    </div>
+
+    <div class="sticker">¡FIESTA RETRO!</div>
+    <p class="eyebrow">Vía láctea · Sector fiesta</p>
+
+    <div class="numero-60">60</div>
+    <h1 class="titulo-glow">¡MIS 60 AÑOS!</h1>
+    <h2 class="nombre-neon"><%= evento.nombreFestejado %></h2>
+
+    <!-- Muñeco disco-ball bailando -->
+    <div class="mascota-disco">
+      <div class="disco-brazo brazo-izq"></div>
+      <div class="disco-brazo brazo-der"></div>
+      <div class="disco-cuerpo">
+        <span class="disco-gafa gafa-izq">★</span>
+        <span class="disco-gafa gafa-der">★</span>
+      </div>
+      <div class="disco-pierna pierna-izq"></div>
+      <div class="disco-pierna pierna-der"></div>
+    </div>
+
+    <p class="scroll-hint">↓ desliza para descubrir la misión ↓</p>
+    <div class="ufo">🛸</div>
+  </section>
+
+  <!-- ===== MENSAJE ===== -->
+  <section class="seccion mensaje">
+    <p class="texto-mensaje"><%= evento.mensajeBienvenida %></p>
+    <div class="separador">✦ ✦ ✦</div>
+    <p class="para-invitado">Esta invitación es especialmente para:</p>
+    <h3 class="nombre-invitado"><%= invitado.nombre %></h3>
+    <p class="pases-info">
+      <%= invitado.cantidad_invitados %> pase<%= invitado.cantidad_invitados > 1 ? 's' : '' %>
+      <%= invitado.es_familiar ? '(invitación familiar)' : '' %>
+    </p>
+  </section>
+
+  <!-- ===== CUENTA REGRESIVA ===== -->
+  <section class="seccion countdown-section">
+    <h3 class="subtitulo">La cuenta regresiva ha comenzado</h3>
+    <div class="countdown" id="countdown" data-fecha="<%= evento.fechaEvento %>">
+      <div class="cd-box"><span id="cd-dias">00</span><label>Días</label></div>
+      <div class="cd-box"><span id="cd-horas">00</span><label>Horas</label></div>
+      <div class="cd-box"><span id="cd-min">00</span><label>Min</label></div>
+      <div class="cd-box"><span id="cd-seg">00</span><label>Seg</label></div>
+    </div>
+  </section>
+
+  <!-- ===== DETALLES ===== -->
+  <section class="seccion detalles">
+    <h3 class="subtitulo">Detalles de la misión</h3>
+
+    <div class="detalle-item">
+      <div class="icono">🗓️</div>
+      <div>
+        <p class="detalle-label">Fecha y hora</p>
+        <p class="detalle-valor" id="fecha-legible">—</p>
+      </div>
+    </div>
+
+    <div class="detalle-item">
+      <div class="icono">📍</div>
+      <div>
+        <p class="detalle-label"><%= evento.lugarNombre %></p>
+        <p class="detalle-valor"><%= evento.direccion %></p>
+        <a class="link-mapa" href="<%= evento.linkMapa %>" target="_blank">Ver mapa →</a>
+      </div>
+    </div>
+
+    <div class="detalle-item">
+      <div class="icono">✨</div>
+      <div>
+        <p class="detalle-label">Código de vestimenta</p>
+        <p class="detalle-valor"><%= evento.codigoVestimenta %></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALERÍA ===== -->
+  <% if (evento.galeria && evento.galeria.length > 0) { %>
+  <section class="seccion galeria">
+    <h3 class="subtitulo">Momentos que nos trajeron hasta aquí</h3>
+    <div class="galeria-grid">
+      <% evento.galeria.forEach(function(foto, i) { %>
+        <div class="galeria-item" onclick="abrirLightbox(<%= i %>)">
+          <img src="<%= foto %>" alt="Foto <%= i + 1 %> de <%= evento.nombreFestejado %>" loading="lazy" />
+        </div>
+      <% }); %>
+    </div>
+  </section>
+  <% } %>
+
+  <!-- ===== RSVP ===== -->
+  <section class="seccion rsvp">
+    <h3 class="subtitulo">¿Nos acompañas en esta órbita?</h3>
+
+    <div id="rsvp-pendiente" class="<%= invitado.estado !== 'pendiente' ? 'oculto' : '' %>">
+      <p class="rsvp-texto">Confirma tu asistencia antes de que la nave despegue 🛸</p>
+
+      <div class="stepper">
+        <button type="button" id="btn-menos">−</button>
+        <span id="cantidad-confirmar"><%= invitado.cantidad_invitados %></span>
+        <button type="button" id="btn-mas">+</button>
+      </div>
+      <p class="stepper-label">personas asistirán (de <%= invitado.cantidad_invitados %> disponibles)</p>
+
+      <div class="rsvp-botones">
+        <button class="btn-confirmar" id="btn-confirmar">✅ Confirmar asistencia</button>
+        <button class="btn-cancelar" id="btn-cancelar">✖ No podré asistir</button>
+      </div>
+    </div>
+
+    <div id="rsvp-confirmado" class="<%= invitado.estado !== 'confirmado' ? 'oculto' : '' %>">
+      <p class="rsvp-exito">🎉 ¡Asistencia confirmada! Nos vemos en la pista.</p>
+      <p class="rsvp-sub"><span id="pases-confirmados-texto"><%= invitado.pases_confirmados %></span> pase(s) confirmados.</p>
+    </div>
+
+    <div id="rsvp-cancelado" class="<%= invitado.estado !== 'cancelado' ? 'oculto' : '' %>">
+      <p class="rsvp-cancel">Registramos que no podrás acompañarnos. ¡Te extrañaremos! 💫</p>
+    </div>
+  </section>
+
+  <!-- ===== PLAYLIST ===== -->
+  <section class="seccion playlist">
+    <h3 class="subtitulo">¿Nos ayudas con la playlist?</h3>
+    <p class="rsvp-texto">Comparte tu canción disco favorita para bailar toda la noche</p>
+    <a class="btn-playlist" href="https://open.spotify.com" target="_blank">AGREGAR UNA CANCIÓN +</a>
+  </section>
+
+  <!-- ===== LIGHTBOX (visor de fotos en grande) ===== -->
+  <% if (evento.galeria && evento.galeria.length > 0) { %>
+  <div class="lightbox-overlay" id="lightbox">
+    <button class="lightbox-cerrar" onclick="cerrarLightbox()">✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="moverLightbox(-1)">‹</button>
+    <img id="lightbox-img" src="" alt="" />
+    <button class="lightbox-nav lightbox-next" onclick="moverLightbox(1)">›</button>
+  </div>
+  <% } %>
+
+  <footer class="footer-final">
+    <p>Con amor, esperando celebrar contigo ✦ <%= evento.nombreFestejado %></p>
+  </footer>
+
+  <script>
+    window.__INVITADO__ = {
+      slug: "<%= invitado.slug %>",
+      cantidad_invitados: <%= invitado.cantidad_invitados %>,
+      estado: "<%= invitado.estado %>"
+    };
+    window.__GALERIA__ = <%- JSON.stringify(evento.galeria || []) %>;
+  </script>
+  <script src="/js/invitacion.js"></script>
+</body>
+</html>
