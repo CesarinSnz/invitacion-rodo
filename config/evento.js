@@ -10,17 +10,12 @@ module.exports = {
   direccion: '52083 Santa María Tetitla, Otzolotepec, Estado de Méx.',
   linkMapa: 'https://maps.app.goo.gl/rbamtAQN2ra3kfJu5',
 
-  codigoVestimenta: 'Retro / Disco',
+  codigoVestimenta: 'Casual / Vente cómodo para bailar mucho :)',
   mensajeBienvenida:
-    'Prepárate para viajar a otra dimensión: nos ponemos retro para celebrar 60 años de pura energía disco.',
+    'Prepárate para viajar a otra dimensión: nos ponemos retro para celebrar 60 años de mucha energía y momentos únicos con las personas que más quiero.',
 
-  // Foto de fondo en la portada (opcional). Pon tu foto en public/images/
-  // y escribe aquí el nombre del archivo. Déjalo como null si no quieres foto de portada.
   fotoPortada: '/images/foto16.jpeg',
 
-  // Galería de fotos. Agrega tus fotos dentro de public/images/
-  // y escribe aquí los nombres de archivo, en el orden que quieras mostrarlas.
-  // Si dejas el arreglo vacío [], la sección de galería no se muestra.
   galeria: [
     '/images/foto1.jpeg',
     '/images/foto2.jpeg',

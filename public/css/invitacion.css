@@ -53,44 +53,140 @@ html, body {
   to { opacity: 1; }
 }
 
-/* ---------- PORTADA ---------- */
-.disco-ball {
-  font-size: 5rem;
-  animation: girar 6s linear infinite, flotar 3s ease-in-out infinite;
-  filter: drop-shadow(0 0 20px var(--azul-neon));
+/* ---------- REPRODUCTOR FLOTANTE DE AUDIO ---------- */
+.btn-mute-flotante {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--azul-neon), var(--rosa-neon));
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 9999;
+  box-shadow: 0 0 20px rgba(63, 208, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-@keyframes girar { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-@keyframes flotar { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
-
-.eyebrow {
-  font-family: 'Orbitron', sans-serif;
-  letter-spacing: 3px;
-  font-size: 0.7rem;
-  color: var(--rosa-neon);
-  text-transform: uppercase;
-  margin-top: 20px;
+.btn-mute-flotante:hover {
+  transform: scale(1.1);
+}
+.btn-mute-flotante.sonando {
+  animation: vibracionMusica 1.2s infinite alternate;
+}
+@keyframes vibracionMusica {
+  0% { box-shadow: 0 0 10px rgba(63, 208, 255, 0.5); transform: scale(1); }
+  100% { box-shadow: 0 0 30px rgba(255, 79, 216, 0.9); transform: scale(1.08); }
 }
 
-.titulo-glow {
+/* ---------- PORTADA REDISEÑADA TIPO COLLAGE / PRO ---------- */
+.seccion.portada-nueva {
+  position: relative;
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 20px 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.contenedor-hero-pro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  z-index: 5;
+}
+
+/* El marco de la foto modificado para ser GRANDE y Pro */
+.marco-foto-collage {
+  position: relative;
+  background: #ffffff;
+  padding: 12px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.7), 0 0 30px rgba(63, 208, 255, 0.3);
+  transform: rotate(-1deg);
+  border-radius: 12px;
+  width: 92%;               /* Se expande de forma responsiva al ancho disponible */
+  max-width: 380px;         /* Límite más alto para que luzca imponente y grande */
+  aspect-ratio: 3 / 4;      /* Proporción ideal para fotos verticales */
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 35px;
+}
+.portada-overlay-foto {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10,14,43,0.05) 0%, rgba(10,14,43,0.3) 100%);
+  border-radius: 8px;
+}
+
+/* EFECTO DE GLOBOS METALIZADOS INFLADOS 3D ("60") */
+.globos-60-container {
+  position: absolute;
+  bottom: -30px;
+  right: -10px;
+  display: flex;
+  gap: 0px;
+  transform: rotate(8deg);
+  z-index: 20;
+}
+.globo-inflado {
   font-family: 'Orbitron', sans-serif;
-  font-size: 2.6rem;
   font-weight: 900;
-  margin: 10px 0 0;
-  color: var(--plateado-brillo);
-  text-shadow:
+  font-size: 110px;         /* Un poquito más grande para acompañar la foto */
+  line-height: 0.9;
+  letter-spacing: -4px;
+  background: linear-gradient(135deg, #ff007f 0%, #ffaa00 50%, #00f0ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(5px 8px 6px rgba(0,0,0,0.6));
+  text-shadow: 
+    1px 1px 0px rgba(255,255,255,0.85),
+    inset -2px -2px 5px rgba(0,0,0,0.4);
+  animation: flotacionGlobo 2.5s infinite ease-in-out alternate;
+}
+.globos-60-container .globo-inflado:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+/* NOMBRE DE RODO EN GIGANTE NEÓN */
+.contenedor-nombre-pro {
+  text-align: center;
+  margin-top: 10px;
+}
+.nombre-rodo-gigante {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 5.5rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  margin: 0;
+  line-height: 1;
+  text-shadow: 
     0 0 10px var(--azul-neon),
     0 0 20px var(--azul-neon),
-    0 0 40px var(--azul-rey);
+    0 0 40px var(--azul-rey),
+    0 0 60px var(--rosa-neon);
+  animation: destelloNeon 2.5s infinite alternate;
 }
-
-.nombre-neon {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.6rem;
-  color: var(--azul-neon);
-  text-shadow: 0 0 12px var(--azul-neon);
+.subtitulo-retro {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: var(--rosa-neon);
   margin-top: 6px;
+  text-shadow: 0 0 8px rgba(255, 79, 216, 0.6);
 }
 
+/* ---------- OTROS ELEMENTOS DE PORTADA ---------- */
 .scroll-hint {
   position: absolute;
   bottom: 90px;
@@ -111,18 +207,6 @@ html, body {
   50% { transform: translateX(30px) rotate(5deg); }
   100% { transform: translateX(-30px) rotate(-5deg); }
 }
-
-.portada.con-foto {
-  background-size: cover;
-  background-position: center;
-}
-.portada-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(10,14,43,0.55) 0%, rgba(10,14,43,0.85) 75%, #0a0e2b 100%);
-  z-index: 0;
-}
-.portada.con-foto > * { position: relative; z-index: 1; }
 
 /* ---------- GALERÍA ESTILO POLAROID/COLLAGE ---------- */
 .galeria { background: linear-gradient(160deg, #0a0e2b, #1a237e); }
@@ -339,21 +423,7 @@ html, body {
   font-size: 0.85rem;
 }
 
-/* ================= NÚMERO BALÓN "60" ================= */
-.numero-60 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 6.5rem;
-  font-weight: 900;
-  line-height: 1;
-  margin-top: 8px;
-  background: linear-gradient(180deg, #ffffff 0%, #d8d8de 35%, #3fd0ff 65%, #1a237e 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.5)) drop-shadow(0 0 22px rgba(63,208,255,0.55));
-}
-
-/* ================= STICKER ================= */
+/* ================= STICKER (badge genérico, aún disponible) ================= */
 .sticker {
   display: inline-block;
   background: #fff;
@@ -374,7 +444,7 @@ html, body {
   50% { transform: rotate(-2deg); }
 }
 
-/* ================= GLOBOS FLOTANTES ================= */
+/* ================= GLOBOS FLOTANTES SUBTERRÁNEOS ================= */
 .globos {
   position: absolute;
   inset: 0;
@@ -410,86 +480,69 @@ html, body {
   100% { transform: translateY(-760px) translateX(-10px) rotate(-6deg); }
 }
 
-/* ================= MUÑECO DISCO-BALL BAILANDO ================= */
-.mascota-disco {
+/* ================= DECORACIÓN ESPACIAL (countdown) ================= */
+.countdown-section { overflow: hidden; }
+.espacio-decor {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.countdown-section .subtitulo,
+.countdown-section .countdown {
   position: relative;
-  width: 130px;
-  height: 190px;
-  margin: 18px auto 0;
+  z-index: 1;
 }
-.disco-cuerpo {
+.planeta-decor {
   position: absolute;
-  top: 0;
-  left: 15px;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 35% 25%, rgba(255,255,255,0.55), transparent 45%),
-    repeating-conic-gradient(#e8e8ec 0deg 12deg, #1a237e 12deg 24deg);
-  box-shadow: 0 0 25px rgba(63,208,255,0.6);
-  animation: disco-cabeceo 1.4s ease-in-out infinite;
-}
-.disco-gafa {
-  position: absolute;
-  top: 38px;
-  font-size: 1.1rem;
-  color: #0a0e2b;
-  text-shadow: 0 0 6px rgba(0,0,0,0.4);
-}
-.gafa-izq { left: 20px; }
-.gafa-der { right: 20px; }
-.disco-brazo, .disco-pierna {
-  position: absolute;
-  width: 12px;
-  border-radius: 8px;
-  background: var(--plateado-brillo);
-}
-.disco-brazo {
-  height: 55px;
-  top: 35px;
-  transform-origin: top center;
-}
-.brazo-izq { left: 8px; animation: brazo-swing-izq 1.4s ease-in-out infinite; }
-.brazo-der { right: 8px; animation: brazo-swing-der 1.4s ease-in-out infinite; }
-.disco-pierna {
+  top: 10%;
+  right: 10%;
+  width: 60px;
   height: 60px;
-  top: 100px;
-  transform-origin: top center;
-  background: var(--plateado);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--rosa-neon), var(--azul-rey) 75%);
+  box-shadow: 0 0 30px rgba(255,79,216,0.5);
+  opacity: 0.75;
 }
-.pierna-izq { left: 42px; animation: pierna-swing-izq 1.4s ease-in-out infinite; }
-.pierna-der { right: 42px; animation: pierna-swing-der 1.4s ease-in-out infinite; }
-.disco-pierna::after {
+.planeta-decor::after {
   content: '';
   position: absolute;
-  bottom: -8px;
-  left: -6px;
-  width: 22px;
-  height: 10px;
-  border-radius: 6px;
-  background: #0a0e2b;
+  top: 50%;
+  left: -25%;
+  width: 150%;
+  height: 8px;
+  background: rgba(255,255,255,0.35);
+  border-radius: 50%;
+  transform: translateY(-50%) rotate(-15deg);
+}
+.ovni-flot {
+  position: absolute;
+  font-size: 1.7rem;
+  opacity: 0.8;
+  animation-name: ovni-cruzar;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  filter: drop-shadow(0 0 8px rgba(63,208,255,0.6));
+}
+.ovni-1 { top: 18%; animation-duration: 13s; animation-delay: 0s; }
+.ovni-2 { top: 50%; font-size: 1.2rem; animation-duration: 17s; animation-delay: 4s; }
+.ovni-3 { top: 72%; animation-duration: 21s; animation-delay: 8s; }
+@keyframes ovni-cruzar {
+  from { left: -10%; transform: translateY(0); }
+  50% { transform: translateY(-18px); }
+  to { left: 105%; transform: translateY(0); }
 }
 
-@keyframes disco-cabeceo {
-  0%, 100% { transform: translateY(0) rotate(-3deg); }
-  50% { transform: translateY(-6px) rotate(3deg); }
-}
-@keyframes brazo-swing-izq {
-  0%, 100% { transform: rotate(-30deg); }
-  50% { transform: rotate(15deg); }
-}
-@keyframes brazo-swing-der {
-  0%, 100% { transform: rotate(30deg); }
-  50% { transform: rotate(-15deg); }
-}
-@keyframes pierna-swing-izq {
-  0%, 100% { transform: rotate(12deg); }
-  50% { transform: rotate(-12deg); }
-}
-@keyframes pierna-swing-der {
-  0%, 100% { transform: rotate(-12deg); }
-  50% { transform: rotate(12deg); }
+/* ================= MESA DE REGALOS ================= */
+.regalos { background: linear-gradient(160deg, #1a237e, #0a0e2b); }
+.regalo-icono { font-size: 3rem; margin-bottom: 14px; }
+.regalo-texto {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: var(--plateado-brillo);
+  max-width: 300px;
 }
 
 /* ================= ALIEN QUE SE ASOMA (fijo, esquina inferior) ================= */
@@ -524,7 +577,16 @@ html, body {
   75%, 88% { transform: translateY(-62px); }
 }
 
+/* --- NUEVAS ANIMACIONES DE PORTADA --- */
+@keyframes flotacionGlobo {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-10px) rotate(5deg); }
+}
+@keyframes destelloNeon {
+  0% { text-shadow: 0 0 10px var(--azul-neon), 0 0 20px var(--azul-neon), 0 0 30px var(--azul-rey); }
+  100% { text-shadow: 0 0 15px var(--azul-neon), 0 0 35px var(--azul-rey), 0 0 55px var(--rosa-neon); }
+}
+
 @media (max-width: 400px) {
-  .numero-60 { font-size: 5rem; }
-  .mascota-disco { transform: scale(0.9); }
+  .nombre-rodo-gigante { font-size: 4.2rem; }
 }
