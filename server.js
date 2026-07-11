@@ -33,7 +33,16 @@ app.use((req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`   Panel admin:  http://localhost:${PORT}/admin`);
-});
+
+// Solo levantamos el servidor con app.listen cuando corremos localmente
+// (con "npm start"). En Vercel, la plataforma importa "app" directamente
+// y lo maneja ella misma — si dejáramos app.listen corriendo siempre,
+// podía ser la causa de que la página se procesara/enviara duplicada.
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`   Panel admin:  http://localhost:${PORT}/admin`);
+  });
+}
+
+module.exports = app;
