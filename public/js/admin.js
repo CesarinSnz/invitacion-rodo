@@ -55,6 +55,7 @@ async function eliminarInvitado(id) {
   if (res.ok) {
     location.reload();
   } else {
-    alert('Error al eliminar');
+    const data = await res.json().catch(() => ({}));
+    alert('Error al eliminar: ' + (data.error || 'desconocido'));
   }
 }

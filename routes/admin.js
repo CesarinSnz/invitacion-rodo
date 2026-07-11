@@ -123,8 +123,9 @@ router.put('/invitados/:id', requireAuth, async (req, res) => {
 // ---------- ELIMINAR ----------
 router.delete('/invitados/:id', requireAuth, async (req, res) => {
   const { error } = await supabase.from('invitados').delete().eq('id', req.params.id);
-  if (error) return res.status(500).json({ error: 'Error al eliminar' });
+  if (error) {
+    console.error('Error al eliminar invitado:', error);
+    return res.status(500).json({ error: error.message || 'Error al eliminar' });
+  }
   res.json({ ok: true });
 });
-
-module.exports = router;
