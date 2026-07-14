@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const path = require('path');
 
 const adminRoutes = require('./routes/admin');
@@ -14,15 +14,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || 'cambia-esto-en-produccion',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 * 8 }, // 8 horas
-  })
-);
+app.use(cookieParser(process.env.SESSION_SECRET || 'cambia-esto-en-produccion'));
 
 app.use('/admin', adminRoutes);
 app.use('/', publicRoutes);
@@ -34,10 +26,6 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-// Solo levantamos el servidor con app.listen cuando corremos localmente
-// (con "npm start"). En Vercel, la plataforma importa "app" directamente
-// y lo maneja ella misma — si dejáramos app.listen corriendo siempre,
-// podía ser la causa de que la página se procesara/enviara duplicada.
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);

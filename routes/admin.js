@@ -23,14 +23,21 @@ router.post('/login', async (req, res) => {
 
   const valido = await bcrypt.compare(password || '', hash);
   if (valido) {
-    req.session.isAdmin = true;
+    res.cookie('admin_session', 'valido', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      signed: true,
+      sameSite: 'lax',
+      maxAge: 1000 * 60 * 60 * 8, // 8 horas
+    });
     return res.redirect('/admin');
   }
   res.render('login', { error: 'Contraseña incorrecta.' });
 });
 
 router.get('/logout', (req, res) => {
-  req.session.destroy(() => res.redirect('/admin/login'));
+  res.clearCookie('admin_session');
+  res.redirect('/admin/login');
 });
 
 // ---------- DASHBOARD ----------
